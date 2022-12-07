@@ -1,0 +1,30 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Users {
+  id       Int      @id @default(autoincrement())
+  name     String   @unique
+  room_num String
+  ModReg   ModReg[]
+}
+
+// model Modules {
+//   moduleId Int      @id @default(autoincrement())
+//   name     String   @unique
+//   ModReg   ModReg[]
+// }
+
+model ModReg {
+  user_name   String
+  mod_name String
+  student   Users   @relation(fields: [user_name], references: [name])
+  // Modules   Modules @relation(fields: [mod_name], references: [name])
+
+  @@id([user_name, mod_name])
+}
