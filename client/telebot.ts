@@ -104,6 +104,7 @@ bot.command("list", (ctx: any) => {
         },
       })
       .then((res: any) => {
+        res.data = Array.from(res.data);
         console.log(res.data);
         if (res.data.length == 0) {
           bot.telegram.sendMessage(
