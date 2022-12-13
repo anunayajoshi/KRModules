@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon telebot.ts"
+    "start": "ts-node telebot.ts"
   },
   "author": "",
   "license": "ISC",

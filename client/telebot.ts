@@ -45,7 +45,13 @@ bot.command("register", (ctx: any) => {
     );
   } else {
     axios
-      .post("/create_user", { tag: ctx.from.username, room_number: room_num })
+      .post(
+        "/create_user",
+        { tag: ctx.from.username, room_number: room_num },
+        {
+          headers: { "Accept-Encoding": "gzip,deflate,compress" },
+        }
+      )
       .then((res: any) => {
         console.log(res.data);
         bot.telegram
@@ -77,7 +83,13 @@ bot.command("add", (ctx: any) => {
     );
   } else {
     axios
-      .post("/add_modules", { tag: ctx.from.username, modules: modules })
+      .post(
+        "/add_modules",
+        { tag: ctx.from.username, modules: modules },
+        {
+          headers: { "Accept-Encoding": "gzip,deflate,compress" },
+        }
+      )
       .then((res: any) => {
         console.log(res.data);
         bot.telegram.sendMessage(
@@ -98,35 +110,41 @@ bot.command("list", (ctx: any) => {
     );
   } else {
     axios
-      .get("/module", {
-        data: {
-          module: mod,
+      .get(
+        "/module",
+        {
+          params: {
+            module: mod,
+          },
         },
-      })
+        {
+          headers: { "Accept-Encoding": "gzip,deflate,compress" },
+        }
+      )
       .then((res: any) => {
         res.data = Array.from(res.data);
-        console.log(res.data);
         if (res.data.length == 0) {
           bot.telegram.sendMessage(
             ctx.chat.id,
             "Sorry, no one has registered for this module yet. Check back again later!"
           );
         } else {
-          bot.telegram.sendMessage(
-            ctx.chat.id,
-            "The following users are taking the module " +
-              mod +
-              ":\n \n" +
-              res.data
-                .map(
-                  (user: any) =>
-                    "@" +
-                    user.user_name +
-                    "     Room No. " +
-                    user.student.room_num
-                )
-                .join("\n")
-          );
+          res.data ??
+            bot.telegram.sendMessage(
+              ctx.chat.id,
+              "The following users are taking the module " +
+                mod +
+                ":\n \n" +
+                res.data
+                  .map(
+                    (user: any) =>
+                      "@" +
+                      user.user_name +
+                      "     Room No. " +
+                      user.student.room_num
+                  )
+                  .join("\n")
+            );
         }
       });
   }
