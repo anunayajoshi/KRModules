@@ -77,6 +77,7 @@ app.get("/module", async (req, res) => {
     },
   });
   res.json(modUsers);
+  console.log(modUsers);
 });
 
 app.delete("/module", async (req, res) => {
