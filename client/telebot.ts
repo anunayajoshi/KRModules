@@ -17,8 +17,8 @@ bot.start((ctx: any) => {
       ctx.from.username +
       ", this bot will help you find groups of people to" +
       " discuss " +
-      "with for modules that you are taking. Please type /register [Room Number] in order to register your account, \n e.g /register B618" +
-      "\n\n Please type /help for more information"
+      "with for modules that you are taking. Please type /register [Room Number] to register your account, \n e.g /register B618" +
+      "\n\n  /help for more information"
   );
 });
 
@@ -35,7 +35,7 @@ bot.help((ctx: any) => {
 
 bot.command("register", (ctx: any) => {
   //console.log(ctx.message.text);
-  const room_num = ctx.message.text.split(" ")[1];
+  const room_num = ctx.message.text.split(" ")[1].toUpperCase();
   console.log(ctx.from.username + "has registered with room_num " + room_num);
 
   if (room_num == undefined) {
@@ -74,6 +74,7 @@ bot.command("register", (ctx: any) => {
 
 bot.command("add", (ctx: any) => {
   const modules = ctx.message.text.split(" ");
+  modules.map((mod: any) => mod.toUpperCase());
   modules.shift();
   console.log(ctx.from.username + " has added modules " + modules);
   if (modules.length == 0) {
@@ -87,21 +88,24 @@ bot.command("add", (ctx: any) => {
         "/add_modules",
         { tag: ctx.from.username, modules: modules },
         {
-          headers: { "Accept-Encoding": "gzip,deflate,compress" },
+          headers: {
+            "Accept-Encoding": "gzip,deflate,compress",
+            "User-Agent": "axios 0.21.1",
+          },
         }
       )
       .then((res: any) => {
         //console.log(res.data);
         bot.telegram.sendMessage(
           ctx.chat.id,
-          "Your modules have been added. You may view who are taking the same mods as you here by typing /list , followed by the module you would like to search. Please input 1 module at a time \n e.g.  /list CS1010S. \n You may delete modules using /delete CS1010S"
+          "Your modules have been added. \n View others taking the same mod by typing /list *space*, [MODULE]. Please input 1 module at a time \n e.g.  /list CS1010S. \n \n You may delete your name from modules using /delete CS1010S"
         );
       });
   }
 });
 
 bot.command("list", (ctx: any) => {
-  const mod = ctx.message.text.split(" ")[1];
+  const mod = ctx.message.text.split(" ")[1].toUpperCase();
   console.log(ctx.from.username + "has listed" + mod);
   if (mod == undefined) {
     bot.telegram.sendMessage(
@@ -118,12 +122,13 @@ bot.command("list", (ctx: any) => {
           },
         },
         {
-          headers: { "Accept-Encoding": "gzip,deflate,compress" },
+          headers: {
+            "Accept-Encoding": "gzip,deflate,compress",
+            "User-Agent": "axios 0.21.1",
+          },
         }
       )
       .then((res: any) => {
-        //res.data = Array.from(res.data);
-        console.log(res.data);
         if (res.data.length == 0) {
           bot.telegram.sendMessage(
             ctx.chat.id,
@@ -151,7 +156,7 @@ bot.command("list", (ctx: any) => {
 });
 
 bot.command("delete", (ctx: any) => {
-  const mod = ctx.message.text.split(" ")[1];
+  const mod = ctx.message.text.split(" ")[1].toUpperCase();
   console.log(ctx.from.username + "has deleted name from" + mod);
   if (mod == undefined) {
     bot.telegram.sendMessage(
