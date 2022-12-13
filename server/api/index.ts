@@ -62,6 +62,7 @@ app.post("/add_modules", async (req, res) => {
 
 app.get("/module", async (req, res) => {
   const { module } = req.body;
+  console.log(module);
   // return all users who have module and their room number
   const modUsers = await prisma.modReg.findMany({
     where: {

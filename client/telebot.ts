@@ -91,7 +91,7 @@ bot.command("add", (ctx: any) => {
         }
       )
       .then((res: any) => {
-        console.log(res.data);
+        //console.log(res.data);
         bot.telegram.sendMessage(
           ctx.chat.id,
           "Your modules have been added. You may view who are taking the same mods as you here by typing /list , followed by the module you would like to search. Please input 1 module at a time \n e.g.  /list CS1010S. \n You may delete modules using /delete CS1010S"
@@ -113,7 +113,7 @@ bot.command("list", (ctx: any) => {
       .get(
         "/module",
         {
-          params: {
+          data: {
             module: mod,
           },
         },
@@ -122,29 +122,29 @@ bot.command("list", (ctx: any) => {
         }
       )
       .then((res: any) => {
-        res.data = Array.from(res.data);
+        //res.data = Array.from(res.data);
+        console.log(res.data);
         if (res.data.length == 0) {
           bot.telegram.sendMessage(
             ctx.chat.id,
             "Sorry, no one has registered for this module yet. Check back again later!"
           );
         } else {
-          res.data ??
-            bot.telegram.sendMessage(
-              ctx.chat.id,
-              "The following users are taking the module " +
-                mod +
-                ":\n \n" +
-                res.data
-                  .map(
-                    (user: any) =>
-                      "@" +
-                      user.user_name +
-                      "     Room No. " +
-                      user.student.room_num
-                  )
-                  .join("\n")
-            );
+          bot.telegram.sendMessage(
+            ctx.chat.id,
+            "The following users are taking the module " +
+              mod +
+              ":\n \n" +
+              res.data
+                .map(
+                  (user: any) =>
+                    "@" +
+                    user.user_name +
+                    "     Room No. " +
+                    user.student.room_num
+                )
+                .join("\n")
+          );
         }
       });
   }
