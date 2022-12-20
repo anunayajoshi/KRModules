@@ -35,15 +35,17 @@ bot.help((ctx: any) => {
 
 bot.command("register", (ctx: any) => {
   //console.log(ctx.message.text);
-  const room_num = ctx.message.text.split(" ")[1].toUpperCase();
-  console.log(ctx.from.username + "has registered with room_num " + room_num);
+  const room = ctx.message.text.split(" ")[1];
+  console.log(ctx.from.username + "has registered with room_num " + room);
 
-  if (room_num == undefined) {
+  if (room == undefined) {
     bot.telegram.sendMessage(
       ctx.chat.id,
-      "Please enter a room number, \n e.g /register B618"
+      "Please enter a room number after typing /register \n e.g /register B618"
     );
   } else {
+    const room_num = room.toUpperCase();
+
     axios
       .post(
         "/create_user",
@@ -74,7 +76,7 @@ bot.command("register", (ctx: any) => {
 
 bot.command("add", (ctx: any) => {
   const modules = ctx.message.text.split(" ");
-  modules.map((mod: any) => mod.toUpperCase());
+  modules.map((mod: any) => mod?.toUpperCase());
   modules.shift();
   console.log(ctx.from.username + " has added modules " + modules);
   if (modules.length == 0) {
@@ -105,14 +107,15 @@ bot.command("add", (ctx: any) => {
 });
 
 bot.command("list", (ctx: any) => {
-  const mod = ctx.message.text.split(" ")[1].toUpperCase();
-  console.log(ctx.from.username + "has listed" + mod);
-  if (mod == undefined) {
+  const lmod = ctx.message.text.split(" ")[1];
+  console.log(ctx.from.username + "has listed " + lmod);
+  if (lmod == undefined) {
     bot.telegram.sendMessage(
       ctx.chat.id,
       "Please input the module code you would like to search for. \n e.g /list CS1010S"
     );
   } else {
+    const mod = lmod.toUpperCase();
     axios
       .get(
         "/module",
@@ -156,7 +159,7 @@ bot.command("list", (ctx: any) => {
 });
 
 bot.command("delete", (ctx: any) => {
-  const mod = ctx.message.text.split(" ")[1].toUpperCase();
+  const mod = ctx.message.text.split(" ")[1]?.toUpperCase();
   console.log(ctx.from.username + "has deleted name from" + mod);
   if (mod == undefined) {
     bot.telegram.sendMessage(
