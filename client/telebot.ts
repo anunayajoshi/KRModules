@@ -16,7 +16,7 @@ bot.start((ctx: any) => {
     "Hello " +
       ctx.from.username +
       ", this bot will help you find groups of people to" +
-      " discuss " +
+      ' "discuss" ' +
       "with for modules that you are taking. Please type /register [Room Number] to register your account, \n e.g /register B618" +
       "\n\n  /help for more information"
   );
@@ -98,7 +98,7 @@ bot.command("add", (ctx: any) => {
         //console.log(res.data);
         bot.telegram.sendMessage(
           ctx.chat.id,
-          "Your modules have been added. \n View others taking the same mod by typing /list *space*, [MODULE]. Please input 1 module at a time \n e.g.  /list CS1010S. \n \n You may delete your name from modules using /delete CS1010S"
+          "Your modules have been added.\n View others taking the same mod by typing \n /list *space* [MODULE]. Please input 1 module at a time \n e.g.  /list CS1010S. \n \n You may delete your name from modules using /delete CS1010S"
         );
       });
   }
@@ -165,12 +165,21 @@ bot.command("delete", (ctx: any) => {
     );
   } else {
     axios
-      .delete("/module", {
-        data: {
-          module: mod,
-          user: ctx.from.username,
+      .delete(
+        "/module",
+        {
+          data: {
+            module: mod,
+            user: ctx.from.username,
+          },
         },
-      })
+        {
+          headers: {
+            "Accept-Encoding": "gzip,deflate,compress",
+            "User-Agent": "axios 0.21.1",
+          },
+        }
+      )
       .then((res: any) => {
         console.log(res.data);
         bot.telegram.sendMessage(
